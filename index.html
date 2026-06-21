@@ -4,56 +4,55 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Test</title>
-	<style>
-		@import url("src/index.css");
-
-		body {
-			font: 100%/1.5 system-ui, sans-serif;
+	<link rel="stylesheet" href="demo.css">
+	<script>
+		var tokens = {
+			hues: ["yellow", "red", "green", "cyan", "blue", "indigo", "pink", "gray"],
+			levels: [95, 90, 85, 80, 70, 60, 50, 40, 30, 20, 10]
 		}
-
-		table {
-			table-layout: fixed;
-			border-collapse: collapse;
-			border-spacing: 0;
-			width: 100%;
-
-			td, th {
-				padding: .2em .5em;
-
-				&[style*="--color"] {
-					background: var(--color);
-				}
-			}
-
-			th:first-child {
-				min-width: 125ch;
-			}
-		}
-	</style>
+	</script>
 </head>
 <body>
+	<label>
+		<input type="checkbox">
+		Dark mode
+	</label>
 <table>
 
-<script>{
-	let hues = ["yellow", "red", "green", "cyan", "blue", "indigo", "pink", "gray"];
-	let levels = [10, 20, 30, 40, 50, 60, 70, 80, 90];
+<script>
 	document.write(`
 		<thead>
 			<tr>
 				<th>Hue</th>
 				<th>Key</th>
-				${levels.map(level => `<th>${level}</th>`).join("")}
+				${tokens.levels.map(level => `<th>${level}</th>`).join("")}
 			</tr>
 		</thead>`);
-	for (let hue of hues) {
+	for (let hue of tokens.hues) {
 		document.write(`
-			<tr>
+			<tr style="--color: var(--color-${hue})">
 				<th>${hue}</th>
-				<th style="--color: var(--color-${hue})"></th>
-				${levels.toReversed().map(level => `<td style="--color: oklch(from var(--color-${hue}) var(--tint-${level}))"></td>`).join("")}
+				<th class=swatch></th>
+				${tokens.levels.map(level =>
+					`<td class=swatch style="--tint: var(--tint-${level})"></td>`).join("")}
 			</tr>`);
 	}
-}</script>
+</script>
 </table>
+<div class="callouts">
+<script>
+for (let hue of tokens.hues) {
+	document.write(`
+		<article class=callout style="--color: var(--color-${hue})">
+			<h3>${hue}</h3>
+			<p>Color: <code>var(--color-${hue})</code></p>
+			<footer>
+				<button>Primary</button>
+				<button class="outline">Secondary</button>
+			</footer>
+		</article>`);
+}
+</script>
+</div>
 </body>
 </html>
