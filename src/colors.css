@@ -1,5 +1,5 @@
 :where(&) {
-	--color-gray: oklch(46% 0.02644 274.26);
+	--color-gray: oklch(50% 0.03 270);
 	--color-pink: oklch(60% 0.28 355);
 	--color-indigo: oklch(52% 0.178 268);
 	--color-blue: oklch(55% 0.23 255);
