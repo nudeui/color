@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Test</title>
+	<style>
+		@import url("src/index.css");
+
+		body {
+			font: 100%/1.5 system-ui, sans-serif;
+		}
+
+		table {
+			table-layout: fixed;
+			border-collapse: collapse;
+			border-spacing: 0;
+			width: 100%;
+
+			td, th {
+				padding: .2em .5em;
+
+				&[style*="--color"] {
+					background: var(--color);
+				}
+			}
+
+			th:first-child {
+				min-width: 125ch;
+			}
+		}
+	</style>
+</head>
+<body>
+<table>
+
+<script>{
+	let hues = ["yellow", "red", "green", "cyan", "blue", "indigo", "pink", "gray"];
+	let levels = [10, 20, 30, 40, 50, 60, 70, 80, 90];
+	document.write(`
+		<thead>
+			<tr>
+				<th>Hue</th>
+				<th>Key</th>
+				${levels.map(level => `<th>${level}</th>`).join("")}
+			</tr>
+		</thead>`);
+	for (let hue of hues) {
+		document.write(`
+			<tr>
+				<th>${hue}</th>
+				<th style="--color: var(--color-${hue})"></th>
+				${levels.toReversed().map(level => `<td style="--color: oklch(from var(--color-${hue}) var(--tint-${level}))"></td>`).join("")}
+			</tr>`);
+	}
+}</script>
+</table>
+</body>
+</html>

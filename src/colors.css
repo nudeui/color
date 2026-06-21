@@ -1,0 +1,10 @@
+:where(:scope, :host) {
+	--color-gray: oklch(46% 0.02644 274.26);
+	--color-pink: oklch(60% 0.28 355);
+	--color-indigo: oklch(52% 0.178 268);
+	--color-blue: oklch(55% 0.23 255);
+	--color-cyan: oklch(70% 0.155 205);
+	--color-green: oklch(65% 0.19 130);
+	--color-red: oklch(59% 0.21 20);
+	--color-yellow: oklch(84% 0.17 85);
+}
