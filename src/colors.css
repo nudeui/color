@@ -1,4 +1,4 @@
-:where(:scope, :host) {
+:where(&) {
 	--color-gray: oklch(46% 0.02644 274.26);
 	--color-pink: oklch(60% 0.28 355);
 	--color-indigo: oklch(52% 0.178 268);

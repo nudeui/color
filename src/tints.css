@@ -1,4 +1,4 @@
-:where(:scope, :host) {
+:where(&) {
 	/* Max chroma for each lightness, based on P3 gamut and eyeballing */
 	--c-10-max: 0.15;
 	--c-20-max: 0.16;
@@ -64,11 +64,5 @@
 	--tint-100: 100% none none;
 	--tint-core: l c h;
 
-	/* 0.623 is the L threshold for switching from light to dark text */
-	--l-threshold: 0.66;
-	--is-light: clamp(0, (l - var(--l-threshold)) * infinity, 1);
-	--is-dark: (1 - var(--is-light));
-	/* FIXME: this is wrong. We're generating a tint-30 based on the background color, not the core color */
-	--text: calc(var(--is-dark) * 1 + var(--is-light) * var(--l-30))
-		calc(var(--is-light) * var(--c-30)) h;
+
 }
