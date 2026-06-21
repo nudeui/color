@@ -1,0 +1,33 @@
+{
+	"name": "color",
+	"version": "0.0.0",
+	"description": "Description",
+	"keywords": ["color", "design-systems", "css", "ui", "design-tokens", "tints"],
+	"homepage": "https://github.com/nudeui/color/#readme",
+	"bugs": {
+		"url": "https://github.com/nudeui/color/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/nudeui/color.git"
+	},
+	"files": [
+		"src"
+	],
+	"license": "MIT",
+	"author": "Lea Verou",
+	"type": "module",
+	"main": "src/index.js",
+	"scripts": {
+		"release": "npm whoami >/dev/null 2>&1 || npm login && release-it",
+		"test": "npx htest test"
+	},
+	"devDependencies": {
+		"prettier": "~3.5.3",
+		"prettier-plugin-brace-style": "latest",
+		"prettier-plugin-merge": "latest",
+		"prettier-plugin-space-before-function-paren": "latest",
+		"release-it": "latest",
+		"htest.dev": "latest"
+	}
+}
