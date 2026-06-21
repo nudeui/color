@@ -1,23 +1,45 @@
 :where(&) {
+	--c-100: 0;
+	--c-95: calc(c * var(--cf-95, 1));
 	--c-90: calc(c * var(--cf-90, 1));
+	--c-85: calc(c * var(--cf-85, 1));
 	--c-80: calc(c * var(--cf-80, 1));
+	--c-75: calc(c * var(--cf-75, 1));
 	--c-70: calc(c * var(--cf-70, 1));
+	--c-65: calc(c * var(--cf-65, 1));
 	--c-60: calc(c * var(--cf-60, 1));
+	--c-55: calc(c * var(--cf-55, 1));
 	--c-50: calc(c * var(--cf-50, 1));
+	--c-45: calc(c * var(--cf-45, 1));
 	--c-40: calc(c * var(--cf-40, 1));
+	--c-35: calc(c * var(--cf-35, 1));
 	--c-30: calc(c * var(--cf-30, 1));
+	--c-25: calc(c * var(--cf-25, 1));
 	--c-20: calc(c * var(--cf-20, 1));
+	--c-15: calc(c * var(--cf-15, 1));
 	--c-10: calc(c * var(--cf-10, 1));
+	--c-05: calc(c * var(--cf-05, 1));
+	--c-0: 0;
 
 	@supports (flex-grow: progress(1, 0, 2)) {
-		--cf-90: (1 - pow(progress(var(--l-90), l, 1), 1.8));
-		--cf-80: (1 - pow(progress(var(--l-80), l, 1), 1.8));
-		--cf-70: (1 - pow(progress(var(--l-70), l, 1), 1.8));
-		--cf-60: (1 - pow(progress(var(--l-60), l, 1), 1.8));
-		--cf-50: (1 - pow(progress(var(--l-50), l, 1), 1.8));
-		--cf-40: (1 - pow(progress(var(--l-40), l, 1), 1.8));
-		--cf-30: (1 - pow(progress(var(--l-30), l, 1), 1.8));
-		--cf-20: (1 - pow(progress(var(--l-20), l, 1), 1.8));
-		--cf-10: (1 - pow(progress(var(--l-10), l, 1), 1.8));
+		--cf-exp: 2;
+		--cf-95: (1 - pow(progress(var(--l-95), l, 1), var(--cf-exp)));
+		--cf-90: (1 - pow(progress(var(--l-90), l, 1), var(--cf-exp)));
+		--cf-85: (1 - pow(progress(var(--l-85), l, 1), var(--cf-exp)));
+		--cf-80: (1 - pow(progress(var(--l-80), l, 1), var(--cf-exp)));
+		--cf-75: (1 - pow(progress(var(--l-75), l, 1), var(--cf-exp)));
+		--cf-70: (1 - pow(progress(var(--l-70), l, 1), var(--cf-exp)));
+		--cf-65: (1 - pow(progress(var(--l-65), l, 1), var(--cf-exp)));
+		--cf-60: (1 - pow(progress(var(--l-60), l, 1), var(--cf-exp)));
+		--cf-55: (1 - pow(progress(var(--l-55), l, 1), var(--cf-exp)));
+		--cf-50: (1 - pow(progress(var(--l-50), l, 1), var(--cf-exp)));
+		--cf-45: (1 - pow(progress(var(--l-45), l, 1), var(--cf-exp)));
+		--cf-40: (1 - pow(progress(var(--l-40), l, 1), var(--cf-exp)));
+		--cf-35: (1 - pow(progress(var(--l-35), l, 1), var(--cf-exp)));
+		--cf-30: (1 - pow(progress(var(--l-30), l, 1), var(--cf-exp)));
+		--cf-25: (1 - pow(progress(var(--l-25), l, 1), var(--cf-exp)));
+		--cf-20: (1 - pow(progress(var(--l-20), l, 1), var(--cf-exp)));
+		--cf-15: (1 - pow(progress(var(--l-15), l, 1), var(--cf-exp)));
+		--cf-10: (1 - pow(progress(var(--l-10), l, 1), var(--cf-exp)));
 	}
 }
