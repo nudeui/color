@@ -1,4 +1,4 @@
-import { css, progress, pow, vars, ref } from "./util.js";
+import { css, progress, pow, vars, ref } from "cssbuild/css";
 import { L, levels, levelsChromatic } from "./constants.js";
 
 const CF_EXP = 1.5;
