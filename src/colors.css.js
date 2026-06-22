@@ -1,10 +1,8 @@
-import { css } from "./util.js";
+import { css, prefixKeys } from "./util.js";
 import { L, levels, colors } from "./constants.js";
 
-export default `
+export default css`
 :where(&) {
-	${
-		Object.entries(colors).map(([name, color])=> `--color-${name}: ${color};`)
-	}
+	${ prefixKeys("--color-", colors) }
 }
 `;

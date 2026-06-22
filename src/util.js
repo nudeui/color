@@ -5,17 +5,19 @@ export const fn = new Proxy({}, {
 		}
 
 		target[name] = function (...args) {
-			return `${name}(${args.filter(Boolean).join(', ')})`;
+			// Drop only absent/empty args (e.g. an unset `strat`); keep meaningful falsy values like 0.
+			return `${name}(${args.filter(arg => arg !== "" && arg != null).join(', ')})`;
 		}
 
 		return target[name];
 	}
 });
 
-export const { progress, round, clamp, pow, calc } = fn;
+export const { round, clamp, pow, calc } = fn;
 
+// Change to emit actual progress() once FF implements
 export function progress (x, min, max) {
-	let ret = (x - min) / (max - min);
+	let ret = `(${x} - ${min}) / (${max} - ${min})`;
 
 	if (x.startsWith("no-clamp")) {
 		x = x.replace("no-clamp", "");
@@ -25,9 +27,36 @@ export function progress (x, min, max) {
 	return clamp(0, ret, 1);
 }
 
-export function v (name, fallback) {
-	fallback = fallback ? `, ${fallback}` : '';
-	return `var(--${name}${fallback})`;
+/**
+ * Builds a string via property access.
+ * The returned proxy coerces to its accumulated string in any string context.
+ * @param {string} str - The initial string to start with, e.g. `--` for CSS variables.
+ * @param {string} sep - The separator to use between parts, e.g. `-` for CSS variables.
+ * @returns {string} A proxy that reads as `str` and extends it on property access.
+ */
+function concatenator (str, sep) {
+	return new Proxy({}, {
+		get (target, name) {
+			// Coercion to string (template literals, concatenation, String()) yields the name so far.
+			if (name === Symbol.toPrimitive || name === "toString" || name === "valueOf") {
+				return () => str;
+			}
+
+			if (name in String.prototype) {
+				return str[name].bind(str);
+			}
+
+			// Any other property access extends the chain, skipping the separator after the leading `--`.
+			return concatenator(str + (str.endsWith(sep) ? "" : sep) + name, sep);
+		},
+	});
+}
+
+export const vars = concatenator("--", "-");
+
+export function ref (name, fallback) {
+	fallback = fallback !== undefined ? `, ${fallback}` : '';
+	return `var(${name}${fallback})`;
 }
 
 
@@ -42,7 +71,7 @@ export function snapToScale(x, points, { strat = '', indent = "\t" } = {}) {
 
 export function css (strings, ...values) {
 	return strings.reduce((acc, str, i) => {
-		const value = values[i - 1];
+		let value = values[i - 1];
 
 		if (value === undefined || value === null) {
 			value = "";
