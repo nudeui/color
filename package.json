@@ -1,8 +1,15 @@
 {
-	"name": "color",
+	"name": "@nudeui/color",
 	"version": "0.0.0",
 	"description": "Description",
-	"keywords": ["color", "design-systems", "css", "ui", "design-tokens", "tints"],
+	"keywords": [
+		"color",
+		"design-systems",
+		"css",
+		"ui",
+		"design-tokens",
+		"tints"
+	],
 	"homepage": "https://github.com/nudeui/color/#readme",
 	"bugs": {
 		"url": "https://github.com/nudeui/color/issues"
@@ -26,18 +33,18 @@
 		"./src/*": "./src/*"
 	},
 	"scripts": {
-		"build": "cssbuild",
-		"dev": "cssbuild --watch",
+		"build": "airdry",
+		"dev": "airdry --watch",
 		"release": "npm whoami >/dev/null 2>&1 || npm login && release-it",
 		"test": "npx htest test"
 	},
 	"devDependencies": {
-		"cssbuild": "file:../cssbuild",
+		"airdry": "file:../airdry",
+		"htest.dev": "latest",
 		"prettier": "~3.5.3",
 		"prettier-plugin-brace-style": "latest",
 		"prettier-plugin-merge": "latest",
 		"prettier-plugin-space-before-function-paren": "latest",
-		"release-it": "latest",
-		"htest.dev": "latest"
+		"release-it": "latest"
 	}
 }
