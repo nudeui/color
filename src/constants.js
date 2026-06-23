@@ -35,3 +35,5 @@ export const colors = {
 	red: "oklch(59% 0.21 20)",
 	gray: "oklch(50% 0.03 270)",
 }
+
+export const hues = Object.keys(colors);
