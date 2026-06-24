@@ -6,6 +6,8 @@ html {
 	&:has(input:checked) {
 		color-scheme: dark;
 	}
+
+	font-size: clamp(.875rem, 1vw + 1vh, 1rem);
 }
 
 body {
