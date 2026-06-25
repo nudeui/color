@@ -1,4 +1,4 @@
-import { round, clamp, progress, calc } from "./fn.js";
+import { round, clamp, progress, calc, ife } from "airdry/css";
 
 export function snapToScale(x, points, { strat = '', indent = "\t" } = {}) {
 	const terms = points.slice(1).map((b, i) => {

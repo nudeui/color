@@ -1,4 +1,4 @@
-import html from "../airdry/src/languages/html/index.js";
+import html from "airdry/html";
 import { colors, levelsChromatic, hues } from "./src/constants.js";
 
 export default html`

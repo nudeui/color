@@ -1,4 +1,4 @@
-import { css, progress, pow, vars, ref } from "airdry/css";
+import { css, progress, pow, vars, ref, max, or, ife, ifs, sop, map } from "airdry/css";
 import { L, levels, levelsChromatic } from "./constants.js";
 
 const CF_EXP = 1.5;
