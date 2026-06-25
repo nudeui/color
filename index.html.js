@@ -7,6 +7,7 @@ export default html`
 		<head>
 			<meta charset="UTF-8" />
 			<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+			<meta name="color-scheme" content="light dark" />
 			<title>Test</title>
 			<link rel="stylesheet" href="demo.css" />
 		</head>
@@ -21,8 +22,12 @@ export default html`
 			</label>
 			<script>
 				// Restore persisted dark mode state right away to avoid a flash
-				document.getElementById("invert-color-scheme").checked =
-					localStorage.invertColorScheme === "true";
+				{
+					let control = document.getElementById("invert-color-scheme");
+					if (localStorage.invertColorScheme === "true") {
+						control.checked = true;
+					}
+				}
 			</script>
 			<table>
 				<thead>
