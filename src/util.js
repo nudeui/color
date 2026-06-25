@@ -9,3 +9,11 @@ export function snapToScale (x, points, { strat = "" } = {}) {
 
 	return calc(terms.join(`\n${indent}+ `));
 }
+
+export function tint_if (condition, tint_true, tint_false) {
+	return [..."lch"]
+		.map(c =>
+			ife(condition, `var(--${c}-${tint_true}, ${c})`, `var(--${c}-${tint_false}, ${c})`))
+		.map(c => calc(c))
+		.join(" ");
+}
