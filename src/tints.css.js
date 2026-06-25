@@ -1,5 +1,5 @@
 import { css, progress, pow, vars, ref, max, or, ife, ifs, sop, map } from "airdry/css";
-import { L, levels, levelsChromatic } from "./constants.js";
+import { L, levels, levelsChromatic } from "./index.js";
 
 // Curvature factors for chroma
 export const chroma = {

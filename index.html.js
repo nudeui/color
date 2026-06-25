@@ -1,5 +1,5 @@
 import html from "airdry/html";
-import { colors, levelsChromatic, hues } from "./src/constants.js";
+import { colors, levelsChromatic, hues } from "./src/index.js";
 
 export default html`
 	<!DOCTYPE html>

@@ -27,7 +27,7 @@
 	"type": "module",
 	"exports": {
 		".": {
-			"import": "./dist/index.css",
+			"import": "./src/index.js",
 			"style": "./dist/index.css"
 		},
 		"./src/*": "./src/*"
