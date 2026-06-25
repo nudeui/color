@@ -30,10 +30,10 @@ export const colors = {
 	green: "oklch(65% 0.19 130)",
 	cyan: "oklch(70% 0.155 205)",
 	blue: "oklch(55% 0.23 255)",
-	indigo: "oklch(52% 0.178 268)",
-	pink: "oklch(60% 0.28 354)",
-	red: "oklch(59% 0.21 20)",
+	indigo: "oklch(43% 0.178 268)",
+	pink: "oklch(60% 0.28 353)",
+	red: "oklch(55% 0.21 20)",
 	gray: "oklch(50% 0.03 270)",
-}
+};
 
 export const hues = Object.keys(colors);
