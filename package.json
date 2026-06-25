@@ -30,7 +30,11 @@
 			"import": "./src/index.js",
 			"style": "./dist/index.css"
 		},
-		"./src/*": "./src/*"
+		"./*": {
+			"style": "./dist/*.css"
+		},
+		"./src/*": "./src/*.css.js",
+		"./dist/*": "./dist/*"
 	},
 	"scripts": {
 		"build": "airdry",
