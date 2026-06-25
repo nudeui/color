@@ -33,12 +33,11 @@ export default html`
 							<tr style="--color: var(--color-${hue})">
 								<th>${hue}</th>
 								<th class="swatch"></th>
-								${levelsChromatic.map(level =>
-									({
-										tag: "td",
-										class: "swatch",
-										style: `--tint: var(--tint-${level})`,
-									}))}
+								${levelsChromatic.map(level => ({
+									tag: "td",
+									class: "swatch",
+									style: `--tint: var(--tint-${level})`,
+								}))}
 							</tr>
 						`,
 					)}
