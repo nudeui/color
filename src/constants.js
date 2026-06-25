@@ -29,10 +29,10 @@ export const colors = {
 	yellow: "oklch(84% 0.17 85)",
 	green: "oklch(65% 0.19 130)",
 	cyan: "oklch(70% 0.155 205)",
-	blue: "oklch(55% 0.23 255)",
-	indigo: "oklch(43% 0.178 268)",
+	blue: "oklch(57% 0.256 257)",
+	indigo: "oklch(48% 0.3 277)",
 	pink: "oklch(60% 0.28 353)",
-	red: "oklch(55% 0.21 20)",
+	red: "oklch(55% 0.24 20)",
 	gray: "oklch(50% 0.03 270)",
 };
 
