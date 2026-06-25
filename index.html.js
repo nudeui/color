@@ -12,12 +12,17 @@ export default html`
 		</head>
 		<body>
 			<label>
-				<input type="checkbox" id="invert-color-scheme" onchange="localStorage.invertColorScheme = this.checked" />
+				<input
+					type="checkbox"
+					id="invert-color-scheme"
+					onchange="localStorage.invertColorScheme = this.checked"
+				/>
 				Invert color scheme
 			</label>
 			<script>
 				// Restore persisted dark mode state right away to avoid a flash
-				document.getElementById("invert-color-scheme").checked = localStorage.invertColorScheme === "true";
+				document.getElementById("invert-color-scheme").checked =
+					localStorage.invertColorScheme === "true";
 			</script>
 			<table>
 				<thead>
