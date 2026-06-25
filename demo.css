@@ -42,11 +42,17 @@ table {
 
 .callout {
 	--color-10: oklch(from var(--color) var(--tint-10));
+	--color-15: oklch(from var(--color) var(--tint-15));
 	--color-20: oklch(from var(--color) var(--tint-20));
+	--color-25: oklch(from var(--color) var(--tint-25));
 	--color-30: oklch(from var(--color) var(--tint-30));
+	--color-35: oklch(from var(--color) var(--tint-35));
 	--color-40: oklch(from var(--color) var(--tint-40));
+	--color-45: oklch(from var(--color) var(--tint-45));
 	--color-50: oklch(from var(--color) var(--tint-50));
+	--color-55: oklch(from var(--color) var(--tint-55));
 	--color-60: oklch(from var(--color) var(--tint-60));
+	--color-65: oklch(from var(--color) var(--tint-65));
 	--color-70: oklch(from var(--color) var(--tint-70));
 	--color-75: oklch(from var(--color) var(--tint-75));
 	--color-80: oklch(from var(--color) var(--tint-80));
@@ -99,9 +105,9 @@ table {
 		}
 
 		&.outline {
-			border-color: var(--color);
+			border-color: light-dark(var(--color-65), var(--color-35));
 			background: none;
-			color: var(--color);
+			color: light-dark(var(--color-40), var(--color-65));
 		}
 	}
 }
