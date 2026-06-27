@@ -17,7 +17,10 @@ export const hue = {
 	},
 };
 
-const getL = LL => (typeof LL === "number" ? `var(--l-${LL})` : LL);
+// Pad numeric levels to 2 digits so the scale is unambiguous: --tint-00, --tint-05, … --tint-100.
+// (Disambiguates absolute levels like --tint-surface-10 from relative offsets like --tint-surface-1.)
+export const pad = LL => (typeof LL === "number" ? String(LL).padStart(2, "0") : LL);
+const getL = LL => (typeof LL === "number" ? `var(--l-${pad(LL)})` : LL);
 const progress_dark = LL => progress(getL(LL), "l", 0);
 const progress_light = LL => progress(getL(LL), "l", 1);
 
@@ -39,7 +42,7 @@ export function c (LL) {
 
 	let expL = pow(progress_light(LL), chroma.exp.lighter);
 	let expD = pow(progress_dark(LL), chroma.exp.darker);
-	return `calc(c * (1 - ${or(expL, expD)}));`;
+	return `calc(c * (1 - ${or(expL, expD)}))`;
 }
 
 export function h (LL) {
@@ -57,19 +60,19 @@ export function h (LL) {
 		);
 		return [gate, shift];
 	});
-	return `calc(h + ${sop(...shifts)});`;
+	return `calc(h + ${sop(...shifts)})`;
 }
 
 export function tint (LL) {
-	return css`var(--l-${LL}, l) var(--c-${LL}, c) var(--h-${LL}, h);`;
+	return css`var(--l-${pad(LL)}, l) var(--c-${pad(LL)}, c) var(--h-${pad(LL)}, h)`;
 }
 
 export function defineTint (LL) {
 	return css`
-		--l-${LL}: ${l(LL)};
-		--c-${LL}: ${c(LL)};
-		--h-${LL}: ${h(LL)};
-		--tint-${LL}: ${tint(LL)};
+		--l-${pad(LL)}: ${l(LL)};
+		--c-${pad(LL)}: ${c(LL)};
+		--h-${pad(LL)}: ${h(LL)};
+		--tint-${pad(LL)}: ${tint(LL)};
 	`;
 }
 
