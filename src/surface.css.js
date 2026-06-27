@@ -1,11 +1,62 @@
-import { css, mapKeys } from "airdry/css";
-import { levels } from "./index.js";
+import { css, map } from "airdry/css";
+import { c, h, pad } from "./tints.css.js";
+import { L, levels } from "./index.js";
 export { template } from "./util.js";
 
 export const properties = {
-	tintSurface: { inherits: false },
+	// Surface depth as a plain number (the "level" on the tint scale). Inherits so wrappers carry
+	// it down; a nested surface descends in level space via `calc(... + var(--step))`.
+	levelSurface: { syntax: "<number>", inherits: true, initial: 100 },
 	colorWhite: { syntax: "<color>", initial: "white" },
 };
+
+// `--step` is a step in LEVEL space, not lightness: −5 in light mode, +5 in dark, so "deeper"
+// means darker on light and lighter on dark. The level → lightness map uses the real tint scale,
+// and c/h follow from that lightness (reusing the tints.css recipes), so we never tabulate c/h.
+const offsets = [-1, 0, 1, 2, 3];
+function relativeTints () {
+	return offsets
+		.map(k => {
+			let name = k === 0 ? "--tint-surface" : `--tint-surface-${k}`;
+			// clamp so offsets past the ends of the scale stay at the nearest tint, not off-grid
+			// (an off-grid level has no `map()` match and would resolve to 0 → black).
+			let level = `clamp(0, var(--level-surface) + ${k} * var(--step), 100)`;
+			let lightness = `--l-surface-${k}`;
+			return css`
+				${lightness}: calc(${map(level, L)});
+				${name}: var(${lightness}) ${c(`var(${lightness})`)} ${h(`var(${lightness})`)};
+			`;
+		})
+		.join("\n");
+}
+
+// Absolute, mode-flipped surface tints: `--tint-surface-NN` is the tint at level NN, flipped in
+// dark mode so high-contrast roles (text, etc.) stay readable regardless of surface. Padded to 2
+// digits to stay distinct from the relative offsets above (`--tint-surface-10` ≠ `--tint-surface-1`).
+function absoluteTints ({ dark = false } = {}) {
+	return levels
+		.map(LL => {
+			let from = dark ? 100 - Math.max(0, LL - 10) : LL;
+			return `--tint-surface-${pad(LL)}: var(--tint-${pad(from)});`;
+		})
+		.join("\n");
+}
+
+// Maintain `--level-surface-parent` = the nearest surface ancestor's level, via one container style
+// query per level. The query condition is the one ancestor-read that escapes the custom-property
+// dependency cycle, so a nested surface can then descend with
+// `--level-surface: calc(var(--level-surface-parent) + var(--step))`.
+function parentLadder () {
+	return levels
+		.map(
+			LL => css`
+				@container style(--level-surface: ${LL}) {
+					--level-surface-parent: ${LL};
+				}
+			`,
+		)
+		.join("\n");
+}
 
 export default css`
 	--color-base: var(--color-gray);
@@ -13,110 +64,28 @@ export default css`
 
 	--is-system-dark: 0;
 	--is-dark: 0;
-	/* Color scheme agnostic tints */
-	--tint-surface: var(--tint-100);
-	${levels.map(LL => `--tint-surface-${LL}: var(--tint-${LL});`).join("\n")}
+	--level-surface: 100;
+	--step: -5;
+	${absoluteTints()}
 
 	@media (prefers-color-scheme: dark) {
 		--is-system-dark: 1;
 		--is-dark: 1;
-		--tint-surface: var(--tint-10);
-		${levels
-			.map(LL => `--tint-surface-${LL}: var(--tint-${100 - Math.max(0, LL - 10)});`)
-			.join("\n")}
+		--level-surface: 10;
+		--step: 5;
+		${absoluteTints({ dark: true })}
 	}
-
-	/* Relative surface tints */
-	${relativeTints(100, { gated: false })}
 `;
 
-// `--tint-surface-N` = N steps (×5) deeper than the current surface (negative = lighter).
-// Style queries can only read ancestors, so each block keys off the parent surface
-// `level` and re-bases the child's ladder there. The root seeds it ungated.
-function relativeTints (level, { gated = true } = {}) {
-	let relativeLevels = 3;
-	let indices = Array.from({ length: relativeLevels * 2 + 1 }, (_, i) => i - relativeLevels);
-	let declarations = indices
-		.map(
-			rl =>
-				`--tint-surface-${rl}: var(--tint-surface-${Math.max(0, Math.min(level - rl * 5, 100))});`,
-		)
-		.join("\n");
-
-	if (!gated) {
-		return declarations;
-	}
-
-	return css`
-		@container (style(--tint-surface: var(--tint-surface-${level}))) {
-			${declarations}
-		}
-	`;
-}
-
-// One block per nesting level, from the root (100) down; deeper surfaces freeze at the last tint.
-const maxNesting = 5;
 export const end = css`
 	body {
 		@container style(--color-white: light-dark(black, white)) {
 			--is-dark: 1;
 		}
 	}
+	/* NOTE relative tints + ladder run on every element; scope to surfaces if it ever shows up in perf. */
 	* {
-		${Array.from({ length: maxNesting }, (_, i) => relativeTints(100 - i * 5)).join("\n")}
+		${relativeTints()}
+		${parentLadder()}
 	}
 `;
-
-/*
-
-:root {
-	--tint-bg: var(--tint-100);
-	--tint-bg-1-: var(--tint-95);
-	--tint-bg-1: var(--tint-90);
-	--tint-bg-2: var(--tint-85);
-	--color-bg: var(--color-base);
-
-	--is-dark-mode: 0;
-
-	{% for tint in range(0, 101, 5) -%}
-	--tint-canvas-{{ tint }}: var(--tint-{{ tint }});
-	{% endfor -%}
-}
-
-@media (prefers-color-scheme: dark) {
-	:root {
-		--is-dark-mode: 1;
-		{% for tint in range(0, 101, 5) -%}
-		--tint-canvas-{{ 100 - tint }}: var(--tint-{{ tint }});
-		{% endfor -%}
-	}
-}
-
-* {
-	@container style(--tint-surface: var(--tint-canvas-100)) {
-		--tint-surface-5: var(--tint-canvas-95);
-		--tint-surface-10: var(--tint-canvas-90);
-
-		--tint-bg-1: var(--tint-95);
-		--tint-bg-2: var(--tint-90);
-
-		--tint-border-½: var(--tint-90);
-		--tint-border-1: var(--tint-85);
-		--tint-border-2: var(--tint-80);
-	}
-	@container style(--tint-bg: var(--tint-95)) {
-		--tint-bg-1-: var(--tint-100);
-		--tint-bg-1: var(--tint-90);
-		--tint-bg-2: var(--tint-85);
-
-		--tint-border-½: var(--tint-85);
-		--tint-border-1: var(--tint-80);
-		--tint-border-2: var(--tint-75);
-	}
-	@container style(--tint-bg: var(--tint-90)) {
-		--tint-bg-1-: var(--tint-95);
-		--tint-bg-1: var(--tint-85);
-		--tint-bg-2: var(--tint-80);
-	}
-}
-*/
