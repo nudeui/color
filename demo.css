@@ -7,11 +7,13 @@ html {
 		color-scheme: dark;
 	}
 
-	font-size: clamp(.875rem, 1vw + 1vh, 1rem);
+	font-size: clamp(0.875rem, 1vw + 1vh, 1rem);
 }
 
 body {
-	font: 100%/1.5 system-ui, sans-serif;
+	font:
+		100%/1.5 system-ui,
+		sans-serif;
 }
 
 table {
@@ -20,8 +22,9 @@ table {
 	border-spacing: 0;
 	width: 100%;
 
-	td, th {
-		padding: .2em .5em;
+	td,
+	th {
+		padding: 0.2em 0.5em;
 
 		&.swatch {
 			background: oklch(from var(--color) var(--tint, var(--tint-core)));
@@ -35,7 +38,7 @@ table {
 
 .callouts {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(14em, 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(15em, 1fr));
 	gap: 1em;
 	margin-top: 2em;
 }
@@ -60,17 +63,27 @@ table {
 	--color-90: oklch(from var(--color) var(--tint-90));
 	--color-95: oklch(from var(--color) var(--tint-95));
 
-	background: light-dark(var(--color-95), var(--color-10));
-	border: 1px solid light-dark(var(--color-80), var(--color-20));
+	--color-surface: var(--color-accent);
+	--color-accent: var(--color);
+
+	--tint-surface: var(--tint-surface-1);
+	--color-bg: oklch(from var(--color-surface) var(--tint-surface));
+	--color-border: oklch(from var(--color-surface) var(--tint-surface-1));
+
+	display: flex;
+	gap: 0.5em;
+	flex-flow: column;
+	background: var(--color-bg);
+	border: 1px solid var(--color-border);
 	border-radius: 0.25em;
-	color: light-dark(var(--color-10), var(--color-90));
-	padding: .5em .8em .8em;
+	color: oklch(from var(--color-surface) var(--tint-surface-10));
+	padding: 0.5em 0.8em 0.8em;
 
 	h3 {
 		font-weight: bold;
 		font-size: 1.25em;
 		margin: 0 0 0.2em;
-		color: light-dark(var(--color-40), var(--color-60));
+		color: oklch(from var(--color-surface) var(--tint-surface-40));
 	}
 
 	p {
@@ -78,8 +91,9 @@ table {
 	}
 
 	code {
-		background: light-dark(var(--color-90), var(--color-20));
-		border: 1px solid light-dark(var(--color-75), var(--color-30));
+		--tint-surface: var(--tint-surface-1);
+		background: oklch(from var(--color-surface) var(--tint-surface));
+		border: 1px solid oklch(from var(--color-surface) var(--tint-surface-2));
 		border-radius: 0.25em;
 		padding: 0.2em 0.4em;
 	}
@@ -96,7 +110,7 @@ table {
 		border-radius: 0.25em;
 		color: oklch(from var(--color) var(--tint-text));
 		font-size: 1em;
-		padding: .4em .8em;
+		padding: 0.4em 0.8em;
 		font-weight: 600;
 		cursor: pointer;
 

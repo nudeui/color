@@ -1,5 +1,6 @@
 import { css, progress, pow, vars, ref, max, or, ife, ifs, sop, map } from "airdry/css";
 import { L, levels, levelsChromatic } from "./index.js";
+export { template } from "./util.js";
 
 // Curvature factors for chroma
 export const chroma = {
@@ -16,54 +17,65 @@ export const hue = {
 	},
 };
 
-// For nicer references
-const [l, c, h] = "lch".split("");
-const varll = LL => `var(--l-${LL})`;
+const getL = LL => (typeof LL === "number" ? `var(--l-${LL})` : LL);
+const progress_dark = LL => progress(getL(LL), "l", 0);
+const progress_light = LL => progress(getL(LL), "l", 1);
 
-const progress_dark = LL => progress(varll(LL), l, 0);
-const progress_light = LL => progress(varll(LL), l, 1);
-const pow_light_dark = (LL, expL, expD) =>
-	or(pow(progress_light(LL), expL), pow(progress_dark(LL), expD));
+export function l (LL) {
+	if (LL === "core") {
+		return "l";
+	}
+	return L[LL];
+}
+
+export function c (LL) {
+	if (LL === "core") {
+		return "c";
+	}
+
+	if (L[LL] <= 0 || L[LL] >= 1) {
+		return 0;
+	}
+
+	let expL = pow(progress_light(LL), chroma.exp.lighter);
+	let expD = pow(progress_dark(LL), chroma.exp.darker);
+	return `calc(c * (1 - ${or(expL, expD)}));`;
+}
+
+export function h (LL) {
+	if (LL === "core" || L[LL] <= 0 || L[LL] >= 1) {
+		return "h";
+	}
+
+	let shifts = Object.values(hue.shifts).flatMap(({ band, darker, lighter }) => {
+		let gate = `clamp(0, 1 - pow(abs(h - ${band.center}) / ${band.extent}, ${band.exp}), 1)`;
+		let shift = sop(
+			darker.max,
+			pow(progress_dark(LL), darker.exp),
+			lighter.max,
+			pow(progress_light(LL), lighter.exp),
+		);
+		return [gate, shift];
+	});
+	return `calc(h + ${sop(...shifts)});`;
+}
+
+export function tint (LL) {
+	return css`var(--l-${LL}, l) var(--c-${LL}, c) var(--h-${LL}, h);`;
+}
+
+export function defineTint (LL) {
+	return css`
+		--l-${LL}: ${l(LL)};
+		--c-${LL}: ${c(LL)};
+		--h-${LL}: ${h(LL)};
+		--tint-${LL}: ${tint(LL)};
+	`;
+}
 
 export default css`
-	:where(&) {
-		/* Lightnesses for each tint */
-		${levels.map(
-			LL => `
-		--l-${LL}: ${L[LL]};
-	`,
-		)}
+	/* Lightnesses for each tint */
+	${defineTint("core")}
 
-		/* Chromas for each tint */
-		--c-100: 0;
-		${levelsChromatic.map(
-			LL =>
-				`--c-${LL}: calc(c * (1 - ${or(pow(progress_light(LL), chroma.exp.lighter), pow(progress_dark(LL), chroma.exp.darker))}));`,
-		)}
-		--c-0: 0;
-
-		/* Hues for each tint: near each key hue, shift toward its dark/light directions, scaled by how far the tint moves from the source toward black/white */
-		${levelsChromatic.map(
-			LL => `--h-${LL}: calc(h + ${Object.values(hue.shifts).map(({
-				band,
-				darker,
-				lighter,
-			}) => {
-				return `clamp(0, 1 - pow(abs(h - ${band.center}) / ${band.extent}, ${band.exp}), 1)
-						* ${sop(
-							darker.max,
-							pow(progress_dark(LL), darker.exp),
-							lighter.max,
-							pow(progress_light(LL), lighter.exp),
-						)}`;
-			})});
-	`,
-		)}
-
-		/* Tints */
-		--tint-core: l c h;
-		--tint-100: 1 0 h;
-		${levels.map(LL => `--tint-${LL}: var(--l-${LL}, l) var(--c-${LL}, c) var(--h-${LL}, h);`)}
-		--tint-0: 0 0 h;
-	}
+	${levels.map(LL => defineTint(LL))}
 `;
