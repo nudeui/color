@@ -5,6 +5,9 @@ html {
 
 	&:has(input:checked) {
 		color-scheme: dark;
+		/* The dark-mode style query can't see this runtime toggle (it's frozen at load), so flip the
+		   surface knob explicitly too. */
+		--is-dark: 1;
 	}
 
 	font-size: clamp(0.875rem, 1vw + 1vh, 1rem);
@@ -38,37 +41,19 @@ table {
 
 .callouts {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(15em, 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(20em, 1fr));
 	gap: 1em;
 	margin-top: 2em;
+	font-size: 80%;
 }
 
 .callout {
-	--color-10: oklch(from var(--color) var(--tint-10));
-	--color-15: oklch(from var(--color) var(--tint-15));
-	--color-20: oklch(from var(--color) var(--tint-20));
-	--color-25: oklch(from var(--color) var(--tint-25));
-	--color-30: oklch(from var(--color) var(--tint-30));
-	--color-35: oklch(from var(--color) var(--tint-35));
-	--color-40: oklch(from var(--color) var(--tint-40));
-	--color-45: oklch(from var(--color) var(--tint-45));
-	--color-50: oklch(from var(--color) var(--tint-50));
-	--color-55: oklch(from var(--color) var(--tint-55));
-	--color-60: oklch(from var(--color) var(--tint-60));
-	--color-65: oklch(from var(--color) var(--tint-65));
-	--color-70: oklch(from var(--color) var(--tint-70));
-	--color-75: oklch(from var(--color) var(--tint-75));
-	--color-80: oklch(from var(--color) var(--tint-80));
-	--color-85: oklch(from var(--color) var(--tint-85));
-	--color-90: oklch(from var(--color) var(--tint-90));
-	--color-95: oklch(from var(--color) var(--tint-95));
-
 	--color-surface: var(--color-accent);
 	--color-accent: var(--color);
 
-	--level-surface: calc(var(--level-surface-parent) + var(--step));
+	--level-surface: var(--level-surface-parent-1);
 	--color-bg: oklch(from var(--color-surface) var(--tint-surface));
-	--color-border: oklch(from var(--color-surface) var(--tint-surface-1));
+	--color-border: oklch(from var(--color-surface) var(--tint-surface-2));
 
 	display: flex;
 	gap: 0.5em;
@@ -91,7 +76,7 @@ table {
 	}
 
 	code {
-		--level-surface: calc(var(--level-surface-parent) + var(--step));
+		--level-surface: var(--level-surface-parent-1);
 		background: oklch(from var(--color-surface) var(--tint-surface));
 		border: 1px solid oklch(from var(--color-surface) var(--tint-surface-2));
 		border-radius: 0.25em;
@@ -119,9 +104,23 @@ table {
 		}
 
 		&.outline {
-			border-color: light-dark(var(--color-65), var(--color-35));
+			border: 0.15em solid oklch(from var(--color-surface) var(--tint-50));
 			background: none;
-			color: light-dark(var(--color-40), var(--color-65));
+			color: oklch(from var(--color-surface) var(--tint-surface-40));
+
+			&:hover {
+				background: oklch(from var(--color-surface) var(--tint-surface-1));
+			}
+		}
+
+		&.tinted {
+			--level-surface: var(--level-surface-1);
+			background: oklch(from var(--color-surface) var(--tint-surface-2));
+			color: oklch(from var(--color-surface) var(--tint-surface-40));
+
+			&:hover {
+				background: oklch(from var(--color-surface) var(--tint-surface-3));
+			}
 		}
 	}
 }

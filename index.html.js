@@ -14,7 +14,9 @@ const callout = ({ hue, buttons }, ...contents) => {
 			${contents.join("\n")}
 			${buttons
 				? html`<footer>
-						<button>Primary</button><button class="outline">Secondary</button>
+						<button>Primary</button>
+						<button class="outline">Secondary</button>
+						<button class="tinted">Tinted</button>
 					</footer>`
 				: ""}
 		</article>
@@ -68,7 +70,7 @@ export default html`
 			callout(
 				{ hue, buttons: true },
 				"This is a callout",
-				callout({}, "Nested callout 1", callout({}, "Nested callout 2")),
+				callout({}, "Nested callout 1", callout({ buttons: true }, "Nested callout 2")),
 			))}
 	</div>
 `;
