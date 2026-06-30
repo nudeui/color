@@ -119,6 +119,7 @@ table {
 			color: oklch(from var(--color-surface) var(--tint-surface-40));
 
 			&:hover {
+				--level-surface: var(--level-surface-2);
 				background: oklch(from var(--color-surface) var(--tint-surface-3));
 			}
 		}
