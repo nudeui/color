@@ -1,4 +1,4 @@
-import { css, round, clamp, progress, calc, ife, sop } from "airdry/css";
+import { css, calc, ife } from "airdry/css";
 import { toKebabCase } from "airdry/lang/util";
 import { levelsChromatic } from "./index.js";
 
@@ -47,18 +47,6 @@ export function registerProperties (properties) {
 	return Object.entries(properties)
 		.map(([name, options]) => registerProperty(name, options))
 		.join("\n");
-}
-
-export function snapToScale (x, points, { strat = "" } = {}) {
-	const terms = points.flatMap((b, i) => {
-		if (i === 0) {
-			return b;
-		}
-		const a = points[i - 1];
-		return [`${b} - ${a}`, round(strat, progress(x, a, b))];
-	});
-
-	return sop(...terms);
 }
 
 export function tint_if (condition, tint_true, tint_false) {
