@@ -67,3 +67,7 @@ export function scale (name, levels = levelsChromatic) {
 		.map(level => `--color-${name}-${level}: ${tint(`var(--color-${name})`, level)};`)
 		.join("\n");
 }
+
+// Pad numeric levels to 2 digits so the scale is unambiguous: --tint-00, --tint-05, … --tint-100.
+// (Disambiguates absolute levels like --tint-surface-10 from relative offsets like --tint-surface-1.)
+export const pad = LL => (typeof LL === "number" ? String(LL).padStart(2, "0") : LL);

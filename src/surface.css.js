@@ -1,7 +1,7 @@
 import { css, map, ife } from "airdry/css";
-import { c, h, pad } from "./tints.css.js";
+import { l, c, h } from "./index.js";
 import { L, levels } from "./index.js";
-export { template } from "./util.js";
+export { template, pad } from "./util.js";
 
 export const properties = {
 	// Surface depth as a level on the tint scale; nested surfaces descend via calc(... + --level-step).

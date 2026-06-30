@@ -1,6 +1,6 @@
 import { css, gt, map, snapToScale } from "airdry/css";
 import { tint_if } from "./util.js";
-import { c, h } from "./tints.css.js";
+import { l, c, h } from "./index.js";
 import { L, levels } from "./index.js";
 export { template } from "./util.js";
 
