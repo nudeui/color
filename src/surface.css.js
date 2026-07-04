@@ -1,7 +1,6 @@
-import { css, map, ife } from "airdry/css";
-import { l, c, h } from "./index.js";
-import { L, levels } from "./index.js";
-export { template, pad } from "./util.js";
+import { css, clamp, ife } from "airdry/css";
+import { levels, l, c, h, pad } from "./index.js";
+export { template } from "./util.js";
 
 export const properties = {
 	// Surface depth as a level on the tint scale; nested surfaces descend via calc(... + --level-step).
@@ -50,8 +49,9 @@ export const end = css`
 	}
 	/* runs on every element; scope to surfaces if perf shows */
 	* {
-		/* Relative tints: --tint-surface is the current level, --tint-surface-N is N deeper (neg = lighter);
-		   clamp keeps off-the-end offsets on-grid (off-grid → no map() match → 0 → black). */
+		/* Relative tints: --tint-surface is the current level, --tint-surface-N is N deeper (neg = lighter).
+		   Lightness interpolates linearly between the 5/95 anchors; the outer clamp keeps it within [0, 1]
+		   (so the lightest level resolves to white; the darkest reachable level lands at ~0.04, near-black). */
 		${offsets.map(k => {
 			let sk = k === 0 ? "" : `-${k}`;
 			let stash =
@@ -60,7 +60,7 @@ export const end = css`
 					: `--level-surface${sk}: clamp(0, calc(var(--level-surface) + ${k} * var(--level-step)), 100);`;
 			return css`
 					${stash}
-					--l-surface${sk}: calc(${map(`var(--level-surface${sk})`, L)});
+					--l-surface${sk}: ${clamp(0, l(`var(--level-surface${sk})`), 1)};
 					--tint-surface${sk}: var(--l-surface${sk}) ${c(`var(--l-surface${sk})`)} ${h(`var(--l-surface${sk})`)};
 				`;
 		})}

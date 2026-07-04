@@ -1,30 +1,7 @@
-import { css, progress, pow, vars, ref, max, or, ife, ifs, sop, map } from "airdry/css";
+import { progress, pow, or, sop, calc_interpolate } from "airdry/css";
 
-export const L = {
-	100: 1, // 3
-	95: 0.97, // 4
-	90: 0.93, // 5
-	85: 0.88, // 4
-	80: 0.84, // 5
-	75: 0.79, // 5
-	70: 0.74, // 5
-	65: 0.69, // 6
-	60: 0.63, // 5
-	55: 0.58, // 6
-	50: 0.52, // 5
-	45: 0.47, // 5
-	40: 0.42, // 6
-	35: 0.38, // 5
-	30: 0.33, // 5
-	25: 0.28, // 5
-	20: 0.23, // 5
-	15: 0.18, // 4
-	10: 0.14, // 5
-	5: 0.09, // 9
-	0: 0,
-};
-
-export const levels = Object.keys(L).map(Number);
+// Tint levels: 0–100 in steps of 5.
+export const levels = Array.from({ length: 21 }, (_, i) => i * 5);
 export const levelsChromatic = levels.filter(level => level !== 0 && level !== 100);
 
 export const colors = {
@@ -39,6 +16,14 @@ export const colors = {
 };
 
 export const hues = Object.keys(colors);
+
+export const lightness = {
+	at_95: 0.97,
+	get gamma () {
+		// return 1.1705;
+		return Math.log(1 - this.at_95) / Math.log(1 - 0.95);
+	},
+};
 
 // Curvature factors for chroma
 export const chroma = {
@@ -62,17 +47,30 @@ const getL = LL => (typeof LL === "number" ? `var(--l-${pad(LL)})` : LL);
 const progress_dark = LL => progress(getL(LL), "l", 0);
 const progress_light = LL => progress(getL(LL), "l", 1);
 
+/**
+ * CSS lightness for a level
+ * @param {number | string} LL
+ * @returns {number | string}
+ */
 export function l (LL) {
 	if (LL === "core") {
 		return "l";
 	}
 
-	if (LL in L) {
-		return L[LL];
+	if (typeof LL === "number") {
+		return Math.round(100 * (1 - Math.pow(1 - LL / 100, lightness.gamma))) / 100;
 	}
 
-	// TODO find nearest specified level instead of hardcoding 5-95
-	return progress(LL, L[5], L[95]);
+	return `calc(1 - pow(1 - ${LL}/100, ${lightness.gamma}))`;
+}
+
+/**
+ * Inverse of {@link l}: map a lightness back to its level on the scale.
+ * @param {number | string} l
+ * @returns {string}
+ */
+export function l_inv (l) {
+	return `calc((1 - pow(1 - ${l}, 1 / ${lightness.gamma})) * 100)`;
 }
 
 export function c (LL) {
@@ -80,7 +78,7 @@ export function c (LL) {
 		return "c";
 	}
 
-	if (L[LL] <= 0 || L[LL] >= 1) {
+	if (LL <= 0 || LL >= 100) {
 		return 0;
 	}
 
@@ -90,7 +88,7 @@ export function c (LL) {
 }
 
 export function h (LL) {
-	if (LL === "core" || L[LL] <= 0 || L[LL] >= 1) {
+	if (LL === "core" || LL <= 0 || LL >= 100) {
 		return "h";
 	}
 

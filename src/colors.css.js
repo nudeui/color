@@ -1,5 +1,5 @@
 import { css, mapKeys } from "airdry/css";
-import { L, levels, colors } from "./index.js";
+import { colors } from "./index.js";
 
 export default css`
 	:where(&) {
