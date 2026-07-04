@@ -21,7 +21,7 @@ Object.assign(l, {
 	at_95: 0.97,
 	get gamma () {
 		// return 1.1705;
-		return Math.log(1 - this.at_95) / Math.log(1 - 0.95);
+		return Math.round((100 * Math.log(1 - this.at_95)) / Math.log(1 - 0.95)) / 100;
 	},
 	inv: l_inv,
 });
