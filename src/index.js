@@ -17,20 +17,20 @@ export const colors = {
 
 export const hues = Object.keys(colors);
 
-export const lightness = {
+Object.assign(l, {
 	at_95: 0.97,
 	get gamma () {
 		// return 1.1705;
 		return Math.log(1 - this.at_95) / Math.log(1 - 0.95);
 	},
-};
+	inv: l_inv,
+});
 
-// Curvature factors for chroma
-export const chroma = {
+Object.assign(c, {
 	exp: { lighter: 2, darker: 1.2 },
-};
+});
 
-export const hue = {
+Object.assign(h, {
 	shifts: {
 		yellows: {
 			band: { center: 84, extent: 27, exp: 1.5 },
@@ -38,7 +38,7 @@ export const hue = {
 			lighter: { max: 11, exp: 0.4 },
 		},
 	},
-};
+});
 
 // Pad numeric levels to 2 digits so the scale is unambiguous: --tint-00, --tint-05, … --tint-100.
 // (Disambiguates absolute levels like --tint-surface-10 from relative offsets like --tint-surface-1.)
@@ -58,19 +58,24 @@ export function l (LL) {
 	}
 
 	if (typeof LL === "number") {
-		return Math.round(100 * (1 - Math.pow(1 - LL / 100, lightness.gamma))) / 100;
+		return Math.round(100 * (1 - Math.pow(1 - LL / 100, l.gamma))) / 100;
 	}
 
-	return `calc(1 - pow(1 - ${LL}/100, ${lightness.gamma}))`;
+	return `calc(1 - pow(1 - ${LL}/100, ${l.gamma}))`;
 }
 
 /**
  * Inverse of {@link l}: map a lightness back to its level on the scale.
- * @param {number | string} l
+ * Snap to levels
+ * @param {number | string} lightness
  * @returns {string}
  */
-export function l_inv (l) {
-	return `calc((1 - pow(1 - ${l}, 1 / ${lightness.gamma})) * 100)`;
+export function l_inv (lightness) {
+	if (typeof lightness === "number") {
+		return 100 * (1 - Math.pow(1 - lightness, 1 / l.gamma));
+	}
+
+	return `round((1 - pow(1 - ${lightness}, 1 / ${l.gamma})) * 100, 5)`;
 }
 
 export function c (LL) {
@@ -82,8 +87,8 @@ export function c (LL) {
 		return 0;
 	}
 
-	let expL = pow(progress_light(LL), chroma.exp.lighter);
-	let expD = pow(progress_dark(LL), chroma.exp.darker);
+	let expL = pow(progress_light(LL), c.exp.lighter);
+	let expD = pow(progress_dark(LL), c.exp.darker);
 	return `calc(c * (1 - ${or(expL, expD)}))`;
 }
 
@@ -92,7 +97,7 @@ export function h (LL) {
 		return "h";
 	}
 
-	let shifts = Object.values(hue.shifts).flatMap(({ band, darker, lighter }) => {
+	let shifts = Object.values(h.shifts).flatMap(({ band, darker, lighter }) => {
 		let gate = `clamp(0, 1 - pow(abs(h - ${band.center}) / ${band.extent}, ${band.exp}), 1)`;
 		let shift = sop(
 			darker.max,
