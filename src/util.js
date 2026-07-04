@@ -49,21 +49,13 @@ export function registerProperties (properties) {
 		.join("\n");
 }
 
-export function tint_if (condition, tint_true, tint_false) {
-	return [..."lch"]
-		.map(c =>
-			ife(condition, `var(--${c}-${tint_true}, ${c})`, `var(--${c}-${tint_false}, ${c})`))
-		.map(c => calc(c))
-		.join(" ");
-}
+// export function tint (color, tint) {
+// 	return `oklch(from ${color} var(--tint-${tint}))`;
+// }
 
-export function tint (color, tint) {
-	return `oklch(from ${color} var(--tint-${tint}))`;
-}
-
-export function scale (name, levels = levelsChromatic) {
-	// --color-core-10: oklch(from var(--color-core) var(--tint-10));
-	return levels
-		.map(level => `--color-${name}-${level}: ${tint(`var(--color-${name})`, level)};`)
-		.join("\n");
-}
+// export function scale (name, levels = levelsChromatic) {
+// 	// --color-core-10: oklch(from var(--color-core) var(--tint-10));
+// 	return levels
+// 		.map(level => `--color-${name}-${level}: ${tint(`var(--color-${name})`, level)};`)
+// 		.join("\n");
+// }

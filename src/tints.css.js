@@ -2,8 +2,16 @@ import { css } from "airdry/css";
 import { levels, l, c, h, pad } from "./index.js";
 export { template } from "./util.js";
 
-export function tint (LL) {
-	return css`var(--l-${pad(LL)}, l) var(--c-${pad(LL)}, c) var(--h-${pad(LL)}, h)`;
+export function tint (suffix) {
+	if (typeof suffix === "number") {
+		suffix = pad(suffix);
+	}
+
+	return /* css */ `var(--l-${suffix}, l) var(--c-${suffix}, c) var(--h-${suffix}, h)`;
+}
+
+export function dynamicTint (l) {
+	return `${l} ${c(l)} ${h(l)}`;
 }
 
 export function defineTint (LL) {
