@@ -61,7 +61,7 @@ export function l (LL) {
 		return Math.round(100 * (1 - Math.pow(1 - LL / 100, l.gamma))) / 100;
 	}
 
-	return `calc(1 - pow(1 - ${LL}/100, ${l.gamma}))`;
+	return `calc(1 - pow(1 - (${LL}) / 100, ${l.gamma}))`;
 }
 
 /**
