@@ -11,7 +11,7 @@ export const colors = {
 	blue: "oklch(57% 0.256 257)",
 	indigo: "oklch(48% 0.3 277)",
 	pink: "oklch(60% 0.28 353)",
-	red: "oklch(55% 0.24 20)",
+	red: "oklch(55% 0.24 25)",
 	gray: "oklch(50% 0.03 270)",
 };
 
