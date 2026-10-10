@@ -1,4 +1,4 @@
-import { css, clamp, ife, calc } from "airdry/css";
+import { css, clamp, ife } from "airdry/css";
 import { levels, l, c, h, pad } from "./index.js";
 export { template } from "./util.js";
 
@@ -30,14 +30,6 @@ export default css`
 const offsets = [-1, 0, 1, 2, 3];
 
 export const end = css`
-	/* Base color at an absolute level, swapped to its dark counterpart when --is-dark */
-	@function --tint-surface(--level, --color <color>: var(--color-base)) returns <color> {
-		result: --tint(
-			var(--color),
-			${calc(ife("var(--is-dark)", "(100 - max(0, var(--level) - 10))", "var(--level)"))}
-		);
-	}
-
 	body {
 		/* Catches an explicit color-scheme too, not just OS (light-dark = white only in dark = --color-white).
 		   NOTE Chrome freezes it at load: a runtime toggle won't re-flip until reload. */

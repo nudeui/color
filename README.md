@@ -4,6 +4,8 @@
 
 In engines that support [CSS custom functions](https://developer.mozilla.org/en-US/docs/Web/CSS/@function) (`@function`), every tint is also available as a function. Colors are returned as `oklch()`, with chroma and hue adjusted the same way as the `--tint-NN` variables.
 
+The functions live in `functions.css`, which is self-contained: load it on its own (`@import "@nudeui/color/functions"`) if you don't need the variables. The defaults of `--tint-text` and `--tint-surface` read `--l-threshold`, `--color-base` and `--is-dark` from the calling element, so without `core.css` and `surface.css` either set those or pass the arguments explicitly.
+
 | Function                                             | Returns                                                                               |
 | ---------------------------------------------------- | ------------------------------------------------------------------------------------- |
 | `--tint(color, level)`                               | `color` at `level` (0–100) on the tint scale                                          |
