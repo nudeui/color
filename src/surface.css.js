@@ -32,7 +32,7 @@ const offsets = [-1, 0, 1, 2, 3];
 export const end = css`
 	/* Base color at an absolute level, swapped to its dark counterpart when --is-dark */
 	@function --tint-surface(--level, --color <color>: var(--color-base)) returns <color> {
-		result: --tint-level(
+		result: --tint(
 			var(--color),
 			${calc(ife("var(--is-dark)", "(100 - max(0, var(--level) - 10))", "var(--level)"))}
 		);

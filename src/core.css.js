@@ -16,6 +16,6 @@ export default css`
 export const end = css`
 	/* Legible text on color: tint 40 on light colors, 100 on dark ones */
 	@function --tint-text(--color <color>, --threshold: var(--l-threshold)) returns <color> {
-		result: --tint-level(var(--color), ${calc(ife(gt("l", "var(--threshold)"), 40, 100))});
+		result: --tint(var(--color), ${calc(ife(gt("l", "var(--threshold)"), 40, 100))});
 	}
 `;

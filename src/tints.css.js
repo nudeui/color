@@ -21,20 +21,17 @@ export const end = css`
 	}
 
 	/* Level of a lightness, snapped to the scale */
-	@function --level(--l) {
+	@function --tint-level(--l) {
 		result: ${l_inv("var(--l)")};
 	}
 
-	@function --tint(--color <color>, --l) returns <color> {
+	@function --tint(--color <color>, --level) returns <color> {
+		--l: --l(var(--level));
 		result: oklch(from var(--color) ${dynamicTint("var(--l)")});
 	}
 
-	@function --tint-level(--color <color>, --level) returns <color> {
-		result: --tint(var(--color), --l(var(--level)));
-	}
-
 	@function --tint-lighter(--color <color>, --steps: 1) returns <color> {
-		result: --tint-level(var(--color), --level(l) + var(--steps) * 5);
+		result: --tint(var(--color), --tint-level(l) + var(--steps) * 5);
 	}
 
 	@function --tint-darker(--color <color>, --steps: 1) returns <color> {
